@@ -6,7 +6,8 @@ const Match = require('./models/Match');
 const AuctionState = require('./models/AuctionState');
 const { authenticate } = require('./middleware/auth');
 
-const BID_SECONDS = 20;
+const BID_SECONDS = Number(process.env.BID_SECONDS) || 10; // har bid ke baad
+const FIRST_BID_SECONDS = Number(process.env.FIRST_BID_SECONDS) || 15; // player aate hi
 const MAX_SQUAD = 25;
 const MAX_OVERSEAS = 8;
 const STARTING_PURSE = 10000; // 100 Cr, har team ke liye same
@@ -104,10 +105,10 @@ function emitRefresh() {
   if (io) io.emit('refresh');
 }
 
-function startTimer() {
+function startTimer(seconds = BID_SECONDS) {
   clearTimeout(timer);
-  state.endsAt = Date.now() + BID_SECONDS * 1000;
-  timer = setTimeout(finishPlayer, BID_SECONDS * 1000);
+  state.endsAt = Date.now() + seconds * 1000;
+  timer = setTimeout(finishPlayer, seconds * 1000);
 }
 
 // Live player hata do aur timer rok do (end + restart mein use hota hai)
@@ -234,7 +235,7 @@ function init(httpServer) {
       state.log = [];
       state.lastResult = null;
       state.version++;
-      startTimer();
+      startTimer(FIRST_BID_SECONDS);
       persist();
       broadcast();
     });
