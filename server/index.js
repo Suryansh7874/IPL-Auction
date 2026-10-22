@@ -20,6 +20,7 @@ const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const auction = require('./auction');
 
+
 const app = express();
 app.set('trust proxy', 1); // Render proxy ke peeche sahi IP ke liye
 app.use(helmet());
@@ -34,6 +35,8 @@ app.use('/api/players', require('./routes/players'));
 app.use('/api/teams', require('./routes/teams'));
 app.use('/api/lineups', require('./routes/lineups'));
 app.use('/api/matches', require('./routes/matches'));
+
+app.use('/api/tournaments', require('./routes/tournaments'));
 
 // Aakhri safety net
 app.use((err, req, res, next) => {

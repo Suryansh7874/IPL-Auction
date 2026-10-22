@@ -9,6 +9,7 @@ import Account from './pages/Account.jsx';
 import AdminUsers from './pages/AdminUsers.jsx';
 import { useAuction } from './socket.js';
 import { getSession, saveSession, clearSession } from './api.js';
+import Tournament from './pages/Tournament.jsx';
 
 function Main({ session, logout, onSession }) {
   const auction = useAuction();
@@ -19,6 +20,7 @@ function Main({ session, logout, onSession }) {
     ['auction', isAdmin ? 'Admin' : 'Auction'],
     ...(isAdmin ? [] : [['lineup', 'My XI']]),
     ['matches', 'Matches'],
+    ['tournament', 'Tournament'],
     ['players', 'All players'],
     ...(isAdmin ? [['users', 'Users']] : []),
     ['account', 'Account'],
@@ -43,6 +45,7 @@ function Main({ session, logout, onSession }) {
       {tab === 'players' && <Players />}
       {tab === 'lineup' && !isAdmin && <Lineup session={session} />}
       {tab === 'matches' && <Matches session={session} tick={auction.tick} />}
+      {tab === 'tournament' && <Tournament session={session} tick={auction.tick} />}
       {tab === 'users' && isAdmin && <AdminUsers />}
       {tab === 'account' && <Account session={session} onSession={onSession} />}
       {tab === 'auction' &&

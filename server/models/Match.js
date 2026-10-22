@@ -7,6 +7,8 @@ const matchSchema = new mongoose.Schema(
   {
     teamA: { type: ObjectId, ref: 'Team' },
     teamB: { type: ObjectId, ref: 'Team' },
+    tournament: { type: ObjectId, ref: 'Tournament', default: null },
+    stage: { type: String, default: 'friendly' },
     batFirst: String, // 'A' or 'B'
     scoreA: score,
     scoreB: score,

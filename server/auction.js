@@ -5,6 +5,7 @@ const Lineup = require('./models/Lineup');
 const Match = require('./models/Match');
 const AuctionState = require('./models/AuctionState');
 const { authenticate } = require('./middleware/auth');
+const Tournament = require('./models/Tournament');
 
 const BID_SECONDS = Number(process.env.BID_SECONDS) || 10; // har bid ke baad
 const FIRST_BID_SECONDS = Number(process.env.FIRST_BID_SECONDS) || 15; // player aate hi
@@ -266,6 +267,8 @@ function init(httpServer) {
         Team.updateMany({}, { purse: STARTING_PURSE, squad: [] }),
         Lineup.deleteMany({}),
         Match.deleteMany({}),
+        Match.deleteMany({}),
+        Tournament.deleteMany({}),
       ]);
       persist();
       broadcast();
