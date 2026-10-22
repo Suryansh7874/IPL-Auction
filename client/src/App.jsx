@@ -3,12 +3,14 @@ import Login from './pages/Login.jsx';
 import Players from './pages/Players.jsx';
 import TeamDashboard from './pages/TeamDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
-import { useAuction } from './socket.js';
-import { getSession, clearSession } from './api.js';
 import Lineup from './pages/Lineup.jsx';
 import Matches from './pages/Matches.jsx';
+import Account from './pages/Account.jsx';
+import AdminUsers from './pages/AdminUsers.jsx';
+import { useAuction } from './socket.js';
+import { getSession, saveSession, clearSession } from './api.js';
 
-function Main({ session, logout }) {
+function Main({ session, logout, onSession }) {
   const auction = useAuction();
   const [tab, setTab] = useState('auction');
   const isAdmin = session.role === 'admin';
@@ -18,6 +20,8 @@ function Main({ session, logout }) {
     ...(isAdmin ? [] : [['lineup', 'My XI']]),
     ['matches', 'Matches'],
     ['players', 'All players'],
+    ...(isAdmin ? [['users', 'Users']] : []),
+    ['account', 'Account'],
   ];
 
   return (
@@ -37,8 +41,10 @@ function Main({ session, logout }) {
         ))}
       </div>
       {tab === 'players' && <Players />}
-      {tab === 'lineup' && <Lineup session={session} />}
+      {tab === 'lineup' && !isAdmin && <Lineup session={session} />}
       {tab === 'matches' && <Matches session={session} tick={auction.tick} />}
+      {tab === 'users' && isAdmin && <AdminUsers />}
+      {tab === 'account' && <Account session={session} onSession={onSession} />}
       {tab === 'auction' &&
         (isAdmin ? (
           <AdminDashboard auction={auction} />
@@ -48,6 +54,7 @@ function Main({ session, logout }) {
     </div>
   );
 }
+
 export default function App() {
   const [session, setSession] = useState(getSession());
   if (!session) return <Login onLogin={setSession} />;
@@ -57,6 +64,10 @@ export default function App() {
       logout={() => {
         clearSession();
         setSession(null);
+      }}
+      onSession={(s) => {
+        saveSession(s);
+        setSession(s);
       }}
     />
   );

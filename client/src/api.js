@@ -2,21 +2,21 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export function getSession() {
   try {
-    return JSON.parse(localStorage.getItem('session'));
+    return JSON.parse(sessionStorage.getItem('session'));
   } catch {
     return null;
   }
 }
 
 export function saveSession(session) {
-  localStorage.setItem('session', JSON.stringify(session));
+  sessionStorage.setItem('session', JSON.stringify(session));
 }
 
 export function clearSession() {
-  localStorage.removeItem('session');
+  sessionStorage.removeItem('session');
 }
 
-// Small helper: sends JSON and attaches the login token if we have one
+// JSON bhejta hai aur login token jodta hai
 export async function api(path, options = {}) {
   const session = getSession();
   const res = await fetch(API + path, {
@@ -29,8 +29,9 @@ export async function api(path, options = {}) {
   });
   const data = await res.json().catch(() => ({}));
   if (res.status === 401) {
+    // Token expire ya password badla: wapas login par
     clearSession();
-    window.location.reload(); // back to the login page
+    window.location.reload();
   }
   if (!res.ok) throw new Error(data.message || 'Something went wrong');
   return data;

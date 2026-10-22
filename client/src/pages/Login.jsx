@@ -38,7 +38,6 @@ export default function Login({ onLogin }) {
         />
         {error && <p className="error">{error}</p>}
         <button type="submit">Login</button>
-        <p className="hint">Try admin / admin123 or mi / team123</p>
       </form>
     </div>
   );
