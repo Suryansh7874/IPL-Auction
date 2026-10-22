@@ -11,7 +11,7 @@ function Countdown({ endsAt }) {
     );
     return () => clearInterval(id);
   }, [endsAt]);
-  return <b>{left}s</b>;
+    return <b className={left <= 5 ? 'timer low' : 'timer'}>{left}s</b>;
 }
 
 export default function LiveCard({ state }) {

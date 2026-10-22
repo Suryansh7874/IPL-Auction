@@ -111,71 +111,73 @@ export default function Lineup({ session }) {
           <p><small>Add players from your squad above.</small></p>
         ) : (
           <div className="table-scroll">
-            <table className="xi-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Player</th>
-                  <th>Role</th>
-                  <th>Bat</th>
-                  <th>Bowl</th>
-                  <th>Field</th>
-                  <th>Bowls</th>
-                  <th>C</th>
-                  <th>VC</th>
-                  <th>WK</th>
-                  <th>Order</th>
-                </tr>
-              </thead>
-              <tbody>
-                {xiPlayers.map((p, i) => (
-                  <tr key={p._id}>
-                    <td>{i + 1}</td>
-                    <td>{p.name}</td>
-                    <td>{p.role}</td>
-                    <td>{p.batting}</td>
-                    <td>{p.bowling}</td>
-                    <td>{p.fielding}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={bowlers.includes(p._id)}
-                        onChange={() => toggleBowler(p._id)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="radio"
-                        name="captain"
-                        checked={captain === p._id}
-                        onChange={() => pickCaptain(p._id)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="radio"
-                        name="vc"
-                        checked={vc === p._id}
-                        onChange={() => pickVc(p._id)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="radio"
-                        name="wk"
-                        disabled={p.role !== 'WK'}
-                        checked={wk === p._id}
-                        onChange={() => setWk(p._id)}
-                      />
-                    </td>
-                    <td>
-                      <button className="ghost" onClick={() => move(i, -1)}>▲</button>{' '}
-                      <button className="ghost" onClick={() => move(i, 1)}>▼</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <table className="xi-table responsive-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Player</th>
+      <th>Role</th>
+      <th>Bat</th>
+      <th>Bowl</th>
+      <th>Field</th>
+      <th>Bowls</th>
+      <th>C</th>
+      <th>VC</th>
+      <th>WK</th>
+      <th>Order</th>
+    </tr>
+  </thead>
+  <tbody>
+    {xiPlayers.map((p, i) => (
+      <tr key={p._id}>
+        <td data-label="#" className="hide-mobile">{i + 1}</td>
+        <td data-label="Player" className="primary">{i + 1}. {p.name}</td>
+        <td data-label="Role">{p.role}</td>
+        <td data-label="Bat">{p.batting}</td>
+        <td data-label="Bowl">{p.bowling}</td>
+        <td data-label="Field">{p.fielding}</td>
+        <td data-label="Bowls">
+          <input
+            type="checkbox"
+            checked={bowlers.includes(p._id)}
+            onChange={() => toggleBowler(p._id)}
+          />
+        </td>
+        <td data-label="Captain">
+          <input
+            type="radio"
+            name="captain"
+            checked={captain === p._id}
+            onChange={() => pickCaptain(p._id)}
+          />
+        </td>
+        <td data-label="Vice-captain">
+          <input
+            type="radio"
+            name="vc"
+            checked={vc === p._id}
+            onChange={() => pickVc(p._id)}
+          />
+        </td>
+        <td data-label="Keeper">
+          <input
+            type="radio"
+            name="wk"
+            disabled={p.role !== 'WK'}
+            checked={wk === p._id}
+            onChange={() => setWk(p._id)}
+          />
+        </td>
+        <td data-label="Order">
+          <span>
+            <button className="ghost" onClick={() => move(i, -1)}>▲</button>{' '}
+            <button className="ghost" onClick={() => move(i, 1)}>▼</button>
+          </span>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
           </div>
         )}
 

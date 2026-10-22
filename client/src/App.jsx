@@ -33,7 +33,7 @@ function Main({ session, logout, onSession }) {
           <button onClick={logout}>Logout</button>
         </div>
       </header>
-      <div className="filters">
+      <div className="filters tabs">
         {tabs.map(([key, label]) => (
           <button key={key} className={tab === key ? 'active' : ''} onClick={() => setTab(key)}>
             {label}

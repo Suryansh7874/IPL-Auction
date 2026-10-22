@@ -41,3 +41,80 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .xi-table input[type='checkbox'],
 .xi-table input[type='radio'] { width: 16px; height: 16px; cursor: pointer; }
 .xi-table input:disabled { cursor: not-allowed; opacity: 0.35; }
+
+/* ---------- Phone / touch friendly ---------- */
+
+/* Upar ke tabs: ek line mein, side mein scroll */
+.tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { flex: 0 0 auto; white-space: nowrap; }
+
+/* Timer: bada, aur aakhri 5 second mein laal + blink */
+.timer { font-size: 22px; font-variant-numeric: tabular-nums; }
+.timer.low { color: #f87171; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.35; } }
+
+/* Bid price bade screens par bhi screen ke hisaab se */
+.card.wide h1 { font-size: clamp(28px, 8vw, 44px); margin: 8px 0; }
+.card.wide h2 { font-size: clamp(18px, 5vw, 24px); }
+
+/* Touch screens: chhoti ungli ke liye bade buttons aur double-tap zoom band */
+@media (pointer: coarse) {
+  button, select, input[type='text'], input[type='password'] { min-height: 44px; }
+  button { touch-action: manipulation; }
+  .xi-table input[type='checkbox'],
+  .xi-table input[type='radio'] { width: 22px; height: 22px; }
+}
+
+@media (max-width: 640px) {
+  .container { padding: 12px; }
+  .topbar h1 { font-size: 22px; margin: 6px 0; }
+
+  /* iPhone input par focus karne par zoom na ho */
+  input, select { font-size: 16px; }
+
+  /* Filter / admin buttons: jagah bhar lein */
+  .filters button { flex: 1 1 auto; }
+  .tabs button { flex: 0 0 auto; }
+
+  /* Bid button hamesha neeche dikhe */
+  .bid-btn {
+    position: sticky;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    z-index: 20;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Table -> cards */
+  .responsive-table,
+  .responsive-table tbody,
+  .responsive-table tr,
+  .responsive-table td { display: block; width: 100%; }
+  .responsive-table thead { display: none; }
+  .responsive-table tbody tr,
+  .responsive-table tbody tr:nth-child(odd) {
+    background: #1e293b;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  .responsive-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+    border: 0;
+    white-space: normal;
+  }
+  .responsive-table td::before {
+    content: attr(data-label);
+    color: #94a3b8;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .responsive-table td.primary { font-size: 16px; font-weight: 700; }
+  .responsive-table td.primary::before { content: none; }
+  .responsive-table td.hide-mobile { display: none; }
+}

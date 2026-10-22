@@ -30,7 +30,7 @@ export default function Players() {
         ))}
       </div>
       {error && <p className="error">{error}</p>}
-      <table>
+      <table className="responsive-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -48,16 +48,16 @@ export default function Players() {
         <tbody>
           {players.map((p) => (
             <tr key={p._id}>
-              <td>{p.name}</td>
-              <td>{p.role}</td>
-              <td>{p.nationality}</td>
-              <td>{p.basePrice}</td>
-              <td>{p.batting}</td>
-              <td>{p.bowling}</td>
-              <td>{p.fielding}</td>
-              <td>{p.experience}</td>
-              <td><b>{p.overall}</b></td>
-              <td>{p.status}</td>
+              <td data-label="Name" className="primary">{p.name}</td>
+              <td data-label="Role">{p.role}</td>
+              <td data-label="Country">{p.nationality}</td>
+              <td data-label="Base (lakh)">{p.basePrice}</td>
+              <td data-label="Bat">{p.batting}</td>
+              <td data-label="Bowl">{p.bowling}</td>
+              <td data-label="Field">{p.fielding}</td>
+              <td data-label="Exp">{p.experience}</td>
+              <td data-label="Overall"><b>{p.overall}</b></td>
+              <td data-label="Status">{p.status}</td>
             </tr>
           ))}
         </tbody>
