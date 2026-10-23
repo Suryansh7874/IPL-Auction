@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
+const { STARTING_PURSE } = require('../config');
 
 const teamSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   shortName: { type: String, required: true },
-  // Money is stored in lakhs of rupees (100 Cr = 10000 lakh)
-  purse: { type: Number, default: 10000 },
+  purse: { type: Number, default: STARTING_PURSE },
   squad: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
 });
 

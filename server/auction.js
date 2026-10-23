@@ -11,7 +11,7 @@ const BID_SECONDS = Number(process.env.BID_SECONDS) || 10; // har bid ke baad
 const FIRST_BID_SECONDS = Number(process.env.FIRST_BID_SECONDS) || 15; // player aate hi
 const MAX_SQUAD = 25;
 const MAX_OVERSEAS = 8;
-const STARTING_PURSE = 10000; // 100 Cr, har team ke liye same
+const { STARTING_PURSE } = require('./config');
 
 let io;
 let timer = null;

@@ -30,6 +30,8 @@ export default function Tournament({ session, tick }) {
   const [rounds, setRounds] = useState(1);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [teams, setTeams] = useState([]);
+  const [selectedTeamIds, setSelectedTeamIds] = useState([]);
 
   const load = () =>
     api('/tournaments/current')
@@ -37,8 +39,17 @@ export default function Tournament({ session, tick }) {
       .catch((e) => setError(e.message));
 
   useEffect(() => {
-    load();
-  }, [tick]);
+  load();
+
+  api('/tournaments/teams')
+    .then((list) => {
+      setTeams(list);
+      setSelectedTeamIds((prev) =>
+        prev.length ? prev : list.map((team) => team._id)
+      );
+    })
+    .catch((e) => setError(e.message));
+}, [tick]);
 
   async function call(path, options) {
     setBusy(true);
@@ -53,7 +64,14 @@ export default function Tournament({ session, tick }) {
   }
 
   const create = () =>
-    call('/tournaments', { method: 'POST', body: { name: tName, rounds: Number(rounds) } });
+  call('/tournaments', {
+    method: 'POST',
+    body: {
+      name: tName,
+      rounds: Number(rounds),
+      teamIds: selectedTeamIds,
+    },
+  });
   const play = (mode) =>
     call(`/tournaments/${data.tournament._id}/play`, { method: 'POST', body: { mode } });
   const reset = () => {
@@ -75,8 +93,79 @@ export default function Tournament({ session, tick }) {
           <option value={1}>Single round-robin (each pair plays once)</option>
           <option value={2}>Double round-robin (each pair plays twice)</option>
         </select>
+        <h3>Select participating teams</h3>
+
+        <div className="filters">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() =>
+              setSelectedTeamIds(teams.map((team) => team._id))
+            }
+          >
+            Select all
+          </button>
+
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setSelectedTeamIds([])}
+          >
+            Clear selection
+          </button>
+        </div>
+
+        <p>
+          <small>
+            {selectedTeamIds.length} of {teams.length} teams selected.
+            Select at least 2 teams.
+          </small>
+        </p>
+
+        <div className="grid">
+          {teams.map((team) => {
+            const selected = selectedTeamIds.includes(team._id);
+
+            return (
+              <label
+                key={team._id}
+                className="card"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  cursor: 'pointer',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selected}
+                  disabled={busy}
+                  onChange={(e) => {
+                    setSelectedTeamIds((prev) =>
+                      e.target.checked
+                        ? [...prev, team._id]
+                        : prev.filter((id) => id !== team._id)
+                    );
+                  }}
+                />
+
+                <span>
+                  <b>{team.shortName}</b>
+                  <br />
+                  <small>{team.name}</small>
+                </span>
+              </label>
+            );
+          })}
+        </div>
         {error && <p className="error">{error}</p>}
-        <button disabled={busy} onClick={create}>Create tournament</button>
+        <button
+          disabled={busy || selectedTeamIds.length < 2}
+          onClick={create}
+        >
+          Create tournament
+        </button>
       </div>
     ) : (
       <p>No tournament has started yet. The admin will start one soon.</p>

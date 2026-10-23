@@ -11,6 +11,7 @@ const Lineup = require('./models/Lineup');
 const Match = require('./models/Match');
 const AuctionState = require('./models/AuctionState');
 const { TEAMS, PLAYERS } = require('./data/players');
+const { STARTING_PURSE } = require('./config');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ipl-auction';
 
@@ -29,7 +30,7 @@ async function run() {
   await User.create({ username: 'admin', passwordHash: adminHash, role: 'admin' });
 
   for (const t of TEAMS) {
-    const team = await Team.create({ ...t, purse: 10000 }); // 100 Cr, sabke liye same
+   const team = await Team.create({ ...t, purse: STARTING_PURSE });
     const hash = await bcrypt.hash(process.env.TEAM_PASSWORD || 'team123', 10);
     await User.create({
       username: t.shortName.toLowerCase(),

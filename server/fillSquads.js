@@ -3,12 +3,13 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const mongoose = require('mongoose');
 const Player = require('./models/Player');
 const Team = require('./models/Team');
+const { STARTING_PURSE } = require('./config');
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ipl-auction');
   const teams = await Team.find().sort({ shortName: 1 });
   const players = await Player.find().sort({ overall: -1 });
-  teams.forEach((t) => { t.squad = []; t.purse = 10000; });
+  teams.forEach((t) => { t.squad = []; t.purse = STARTING_PURSE; });
 
   // Snake draft by overall score so teams are balanced
   players.forEach((p, i) => {
